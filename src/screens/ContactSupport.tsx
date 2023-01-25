@@ -1,11 +1,13 @@
 import { useState } from "react";
 
-import { HStack, Button, Center, FormControl, Input, Text, TextArea, useTheme } from "native-base";
+import { HStack, Center, FormControl, Text, useTheme } from "native-base";
 import { Feather } from "@expo/vector-icons"
-import { Spinner } from "../components/Loading";
 
 import Toast from "react-native-toast-message";
 import { useNavigation } from "@react-navigation/native";
+import { Button } from "../components/Button";
+import { Input } from "../components/Input";
+import { TextArea } from "../components/TextArea";
 
 export function ContactSupport() {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
@@ -83,19 +85,7 @@ export function ContactSupport() {
         >
           E-mail
         </Text>
-        <Input 
-          borderColor={"ignite.500"}
-          borderWidth={1}
-          borderRadius={6}
-
-          color={"gray.200"}
-          
-          h={"12"}
-          w={"full"}
-        
-          fontFamily={"roboto"}
-          fontSize={"md"}
-
+        <Input
           InputLeftElement={
             <Feather 
               name="user"
@@ -108,12 +98,7 @@ export function ContactSupport() {
           }
 
           placeholder="Digite seu email..."
-          placeholderTextColor={colors.gray[500]}
 
-          _focus={{
-            borderWidth: 2,
-            borderColor: "ignite.300",
-          }}
         />
 
         <Text
@@ -124,51 +109,18 @@ export function ContactSupport() {
         >
           Descrição do problema
         </Text>
-        <TextArea 
-          totalLines={9}
-          autoCorrect={false} 
-          autoCompleteType={undefined}       
-          color={"gray.300"}
-
+        <TextArea
           placeholder="Descreva seu problema aqui..."
-          placeholderTextColor={colors.gray[500]}
-
-          fontSize={16}
-
-          borderColor={"ignite.500"}
-          borderWidth={1}
-          borderRadius={4}
-          h={32}
-
-          _focus={{
-            borderColor: "ignite.300",
-            color: "gray.200"
-          }}
         />
       </FormControl>
 
-      <Button
-        mt={8}
-        w="full"
-        h={12}
-
-        bgColor={"ignite.500"}
-
-        _pressed={{
-          bgColor: "ignite.300"
-        }}
+      <Button 
+        text="Enviar Suporte"
+        disabled={isSubmitting}
+        isLoading={isSubmitting}
 
         onPress={handleSendMessageToSupport}
-        disabled={isSubmitting}
-      >
-        {isSubmitting ? (
-          <Spinner color={colors.white} />
-        ) : (
-          <Text color={"gray.100"} fontSize={16} fontWeight={"bold"}>
-            Enviar Suporte
-          </Text>
-        )}
-      </Button>
+      />
     </Center>
   )
 }

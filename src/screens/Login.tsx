@@ -1,11 +1,12 @@
 import { useState } from "react"
 
-import { Button, Center, FormControl, Input, ScrollView, Text, useTheme } from "native-base";
+import { Center, FormControl, Text, useTheme } from "native-base";
 import { Feather } from "@expo/vector-icons";
-import { Spinner } from "../components/Loading";
 import { useNavigation } from "@react-navigation/native";
 
 import Toast from "react-native-toast-message";
+import { Button } from "../components/Button";
+import { Input } from "../components/Input";
 
 
 export function Login() {
@@ -68,18 +69,8 @@ export function Login() {
         >
           E-mail
         </Text>
-        <Input 
-          borderColor={"ignite.500"}
-          borderWidth={1}
-          borderRadius={6}
-
-          color={"gray.200"}
-          
-          h={"16"}
-          w={"full"}
-        
-          fontFamily={"roboto"}
-          fontSize={"md"}
+        <Input
+          h={16}
 
           InputLeftElement={
             <Feather 
@@ -93,12 +84,7 @@ export function Login() {
           }
 
           placeholder="Digite seu email..."
-          placeholderTextColor={colors.gray[500]}
 
-          _focus={{
-            borderWidth: 2,
-            borderColor: "ignite.300",
-          }}
         />
 
         <Text
@@ -112,17 +98,7 @@ export function Login() {
           Senha
         </Text>
         <Input 
-          borderColor={"ignite.500"}
-          borderWidth={1}
-          borderRadius={6}
-
-          color={"gray.200"}
-          
-          h={"16"}
-          w={"full"}
-        
-          fontFamily={"roboto"}
-          fontSize={"md"}
+          h={16}
 
           InputLeftElement={
             showPassword ? (
@@ -149,39 +125,18 @@ export function Login() {
           }
 
           placeholder="Digite seu senha..."
-          placeholderTextColor={colors.gray[500]}
-
           type={showPassword ? "text" : "password"}
 
-          _focus={{
-            borderWidth: 2,
-            borderColor: "ignite.300",
-          }}
         />
       </FormControl>
 
       <Button
-        mt={8}
-        w="full"
-        h={12}
-
-        bgColor={"ignite.500"}
-
-        _pressed={{
-          bgColor: "ignite.300"
-        }}
+        text="Entrar"
+        isLoading={isSubmitting}
+        disabled={isSubmitting}
 
         onPress={handleAuthenticateUser}
-        disabled={isSubmitting}
-      >
-        {isSubmitting ? (
-          <Spinner color={colors.white} />
-        ) : (
-          <Text color={"gray.100"} fontSize={16} fontWeight={"bold"}>
-            Entrar
-          </Text>
-        )}
-      </Button>
+      />
 
       <Text
         color={"gray.300"}
