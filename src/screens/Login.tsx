@@ -1,6 +1,6 @@
-import { useState } from "react"
+import { useState } from "react";
 
-import { Center, FormControl, Text, useTheme } from "native-base";
+import { Center, Text, View, useTheme } from "native-base";
 import { Feather } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 
@@ -8,58 +8,75 @@ import Toast from "react-native-toast-message";
 import { Button } from "../components/Button";
 import { Input } from "../components/Input";
 
+import * as zod from "zod";
+
+import { useForm, Controller } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+const loginSchema = zod.object({
+  email: zod
+    .string()
+    // .email({ message: "Você precisa inserir um e-mail válido!" })
+    // .regex(
+    //   /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/g,
+    //   { message: "Você precisa inserir um e-mail válido!" }
+    // )
+    .min(5, { message: "O e-mail precisa ter no mínimo 5 caracteres!" }),
+  password: zod
+    .string()
+    .min(5, { message: "A senha precisa ter no mínimo 5 caracteres!" }),
+});
+
+type LoginFormData = zod.output<typeof loginSchema>;
 
 export function Login() {
-  const [showPassword, setShowPassword] = useState<boolean>(false);
-  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [hidePassword, setHidePassword] = useState<boolean>(true);
 
-  const { navigate } = useNavigation()
-  const { colors } = useTheme()
+  const { navigate } = useNavigation();
+  const { colors } = useTheme();
 
-  async function handleAuthenticateUser() {
+  const {
+    control,
+    handleSubmit,
+    formState: { isSubmitting, errors },
+  } = useForm<LoginFormData>({
+    resolver: zodResolver(loginSchema),
+  });
+
+  async function handleAuthenticateUser(data: LoginFormData) {
     try {
-      setIsSubmitting(true)
-
       Toast.show({
         text1: "Success",
-        text2: "Login efetuado com sucesso"
-      })
+        text2: "Login efetuado com sucesso",
+      });
 
-      navigate("home")
+      console.log(data);
+
+      navigate("home");
     } catch (err) {
-      console.log(err)
+      console.log(err);
 
       Toast.show({
         text1: "Failed",
         text2: "Não foi possível efetuar o login!",
-        type: "error"
-      })
-    } finally {
-      setIsSubmitting(false)
+        type: "error",
+      });
     }
   }
 
   return (
-    <Center
-      flex={1} 
-      p={8}
-      bgColor={"gray.900"}
-
-      textAlign={"left"}
-    >
+    <Center flex={1} p={8} bgColor={"gray.900"} textAlign={"left"}>
       <Text
         fontWeight={900}
         fontFamily={"roboto"}
         fontSize={32}
         fontStyle={"normal"}
-
         color={"white"}
         mb={10}
-
       >
         Faça seu login!
       </Text>
-      <FormControl>
+      <View>
         <Text
           mb={2}
           fontSize={20}
@@ -69,22 +86,28 @@ export function Login() {
         >
           E-mail
         </Text>
-        <Input
-          h={16}
-
-          InputLeftElement={
-            <Feather 
-              name="user"
-              size={24}
-              color={colors.gray[200]}
-              style={{
-                marginLeft: 12
-              }}
+        <Controller
+          control={control}
+          name="email"
+          render={({ field: { onChange } }) => (
+            <Input
+              h={16}
+              InputLeftElement={
+                <Feather
+                  name="user"
+                  size={24}
+                  color={colors.gray[200]}
+                  style={{
+                    marginLeft: 12,
+                  }}
+                />
+              }
+              placeholder="Digite seu email..."
+              onChangeText={onChange}
+              isInvalid={!!errors.email}
+              errorMessage={errors.email?.message}
             />
-          }
-
-          placeholder="Digite seu email..."
-
+          )}
         />
 
         <Text
@@ -97,58 +120,57 @@ export function Login() {
         >
           Senha
         </Text>
-        <Input 
-          h={16}
-
-          InputLeftElement={
-            showPassword ? (
-              <Feather 
-                name="eye"
-                size={24}
-                color={colors.gray[200]}
-                onPress={() => setShowPassword(false)}
-                style={{
-                  marginLeft: 12
-                }}
-              />
-            ) : (
-              <Feather 
-                name="eye-off"
-                size={24}
-                color={colors.gray[200]}
-                onPress={() => setShowPassword(true)}
-                style={{
-                  marginLeft: 12
-                }}
-              />
-            )
-          }
-
-          placeholder="Digite seu senha..."
-          type={showPassword ? "text" : "password"}
-
+        <Controller
+          control={control}
+          name="password"
+          render={({ field: { onChange } }) => (
+            <Input
+              h={16}
+              InputLeftElement={
+                hidePassword ? (
+                  <Feather
+                    name="eye"
+                    size={24}
+                    color={colors.gray[200]}
+                    onPress={() => setHidePassword(false)}
+                    style={{
+                      marginLeft: 12,
+                    }}
+                  />
+                ) : (
+                  <Feather
+                    name="eye-off"
+                    size={24}
+                    color={colors.gray[200]}
+                    onPress={() => setHidePassword(true)}
+                    style={{
+                      marginLeft: 12,
+                    }}
+                  />
+                )
+              }
+              placeholder="Digite seu senha..."
+              secureTextEntry={hidePassword}
+              onChangeText={onChange}
+              isInvalid={!!errors.password}
+              errorMessage={errors.password?.message}
+            />
+          )}
         />
-      </FormControl>
+      </View>
 
       <Button
         text="Entrar"
         isLoading={isSubmitting}
         disabled={isSubmitting}
-
-        onPress={handleAuthenticateUser}
+        onPress={handleSubmit(handleAuthenticateUser)}
       />
 
-      <Text
-        color={"gray.300"}
-        mt={2}
-
-        p={0}
-      >
-        Está com problemas para entrar? {' '} 
-        <Text 
+      <Text color={"gray.300"} mt={2} p={0}>
+        Está com problemas para entrar?{" "}
+        <Text
           color={"blue.800"}
           textDecorationLine={"underline"}
-
           onPress={() => navigate("contact_support")}
         >
           Entre em contato com o support aqui...
