@@ -8,8 +8,8 @@ import {
   Roboto_500Medium,
   Roboto_700Bold,
   Roboto_900Black,
-  useFonts
-} from "@expo-google-fonts/roboto"
+  useFonts,
+} from "@expo-google-fonts/roboto";
 import { Loading } from "./src/components/Loading";
 import Toast from "react-native-toast-message";
 
@@ -19,22 +19,15 @@ export default function App() {
     Roboto_500Medium,
     Roboto_700Bold,
     Roboto_900Black,
-  })
+  });
 
   return (
     <NativeBaseProvider theme={theme}>
-      {fontsLoaded ? (<Routes />) : <Loading />}
+      {fontsLoaded ? <Routes /> : <Loading />}
 
-      <StatusBar
-        style="inverted"
-        backgroundColor="transparent"
-        translucent
-      />
+      <StatusBar style="inverted" backgroundColor="transparent" translucent />
 
-      <Toast 
-        position="top"
-        topOffset={50}
-      />
+      <Toast position="top" topOffset={50} />
     </NativeBaseProvider>
   );
 }

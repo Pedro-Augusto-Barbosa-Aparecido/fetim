@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { Center, Text, View, useTheme } from "native-base";
+import { Center, ScrollView, Text, View, useTheme } from "native-base";
 import { Feather } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 
@@ -15,15 +15,16 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 const loginSchema = zod.object({
   email: zod
-    .string()
-    // .email({ message: "Você precisa inserir um e-mail válido!" })
+    .string({ required_error: "E-mail precisa ser informado." })
+    .email({ message: "Você precisa inserir um e-mail válido!" })
     // .regex(
     //   /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/g,
     //   { message: "Você precisa inserir um e-mail válido!" }
     // )
     .min(5, { message: "O e-mail precisa ter no mínimo 5 caracteres!" }),
   password: zod
-    .string()
+    .string({ required_error: "Informe uma senha!" })
+    .trim()
     .min(5, { message: "A senha precisa ter no mínimo 5 caracteres!" }),
 });
 
@@ -65,117 +66,126 @@ export function Login() {
   }
 
   return (
-    <Center flex={1} p={8} bgColor={"gray.900"} textAlign={"left"}>
-      <Text
-        fontWeight={900}
-        fontFamily={"roboto"}
-        fontSize={32}
-        fontStyle={"normal"}
-        color={"white"}
-        mb={10}
-      >
-        Faça seu login!
-      </Text>
-      <View>
+    <ScrollView
+      // flex={1}
+      contentContainerStyle={{
+        // flex: 1,
+        flexGrow: 1,
+      }}
+    >
+      <Center flex={1} p={8} bgColor={"gray.900"} textAlign={"left"}>
         <Text
-          mb={2}
-          fontSize={20}
+          fontWeight={900}
           fontFamily={"roboto"}
-          fontWeight={500}
-          color={"gray.300"}
+          fontSize={32}
+          fontStyle={"normal"}
+          color={"white"}
+          mb={10}
         >
-          E-mail
+          Faça seu login!
         </Text>
-        <Controller
-          control={control}
-          name="email"
-          render={({ field: { onChange } }) => (
-            <Input
-              h={16}
-              InputLeftElement={
-                <Feather
-                  name="user"
-                  size={24}
-                  color={colors.gray[200]}
-                  style={{
-                    marginLeft: 12,
-                  }}
-                />
-              }
-              placeholder="Digite seu email..."
-              onChangeText={onChange}
-              isInvalid={!!errors.email}
-              errorMessage={errors.email?.message}
-            />
-          )}
-        />
-
-        <Text
-          mb={2}
-          mt={4}
-          fontSize={20}
-          fontFamily={"roboto"}
-          fontWeight={500}
-          color={"gray.300"}
-        >
-          Senha
-        </Text>
-        <Controller
-          control={control}
-          name="password"
-          render={({ field: { onChange } }) => (
-            <Input
-              h={16}
-              InputLeftElement={
-                hidePassword ? (
+        <View>
+          <Text
+            mb={2}
+            fontSize={20}
+            fontFamily={"roboto"}
+            fontWeight={500}
+            color={"gray.300"}
+          >
+            E-mail
+          </Text>
+          <Controller
+            control={control}
+            name="email"
+            render={({ field: { onChange } }) => (
+              <Input
+                h={16}
+                InputLeftElement={
                   <Feather
-                    name="eye"
+                    name="user"
                     size={24}
                     color={colors.gray[200]}
-                    onPress={() => setHidePassword(false)}
                     style={{
                       marginLeft: 12,
                     }}
                   />
-                ) : (
-                  <Feather
-                    name="eye-off"
-                    size={24}
-                    color={colors.gray[200]}
-                    onPress={() => setHidePassword(true)}
-                    style={{
-                      marginLeft: 12,
-                    }}
-                  />
-                )
-              }
-              placeholder="Digite seu senha..."
-              secureTextEntry={hidePassword}
-              onChangeText={onChange}
-              isInvalid={!!errors.password}
-              errorMessage={errors.password?.message}
-            />
-          )}
+                }
+                placeholder="Digite seu email..."
+                onChangeText={onChange}
+                isInvalid={!!errors.email}
+                errorMessage={errors.email?.message}
+                keyboardType="email-address"
+              />
+            )}
+          />
+
+          <Text
+            mb={2}
+            mt={4}
+            fontSize={20}
+            fontFamily={"roboto"}
+            fontWeight={500}
+            color={"gray.300"}
+          >
+            Senha
+          </Text>
+          <Controller
+            control={control}
+            name="password"
+            render={({ field: { onChange } }) => (
+              <Input
+                h={16}
+                InputLeftElement={
+                  hidePassword ? (
+                    <Feather
+                      name="eye-off"
+                      size={24}
+                      color={colors.gray[200]}
+                      onPress={() => setHidePassword(false)}
+                      style={{
+                        marginLeft: 12,
+                      }}
+                    />
+                  ) : (
+                    <Feather
+                      name="eye"
+                      size={24}
+                      color={colors.gray[200]}
+                      onPress={() => setHidePassword(true)}
+                      style={{
+                        marginLeft: 12,
+                      }}
+                    />
+                  )
+                }
+                placeholder="Digite seu senha..."
+                secureTextEntry={hidePassword}
+                onChangeText={onChange}
+                isInvalid={!!errors.password}
+                errorMessage={errors.password?.message}
+              />
+            )}
+          />
+        </View>
+
+        <Button
+          text="Entrar"
+          isLoading={isSubmitting}
+          disabled={isSubmitting}
+          onPress={handleSubmit(handleAuthenticateUser)}
         />
-      </View>
 
-      <Button
-        text="Entrar"
-        isLoading={isSubmitting}
-        disabled={isSubmitting}
-        onPress={handleSubmit(handleAuthenticateUser)}
-      />
-
-      <Text color={"gray.300"} mt={2} p={0}>
-        Está com problemas para entrar?{" "}
-        <Text
-          color={"blue.800"}
-          textDecorationLine={"underline"}
-          onPress={() => navigate("contact_support")}
-        >
-          Entre em contato com o support aqui...
+        <Text color={"gray.300"} mt={2} p={0}>
+          Está com problemas para entrar?{" "}
+          <Text
+            color={"blue.800"}
+            textDecorationLine={"underline"}
+            onPress={() => navigate("contact_support")}
+          >
+            Entre em contato com o support aqui...
+          </Text>
         </Text>
-      </Text>
-    </Center>
+      </Center>
+    </ScrollView>
   );
 }

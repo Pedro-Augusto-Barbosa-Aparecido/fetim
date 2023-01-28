@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "364376702861",
+    "project_id": "auth-app-fetim",
+    "storage_bucket": "auth-app-fetim.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:364376702861:android:0323725f5059c18cf407c4",
+        "android_client_info": {
+          "package_name": "com.pedro12354k.fetim"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "364376702861-snndj4ik4mtmdiej695k3unh8rhk05et.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCDfTeEQTtSL5PSYIQxNxmdCfFKTYqr8R4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "364376702861-snndj4ik4mtmdiej695k3unh8rhk05et.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
