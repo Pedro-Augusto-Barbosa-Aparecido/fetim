@@ -42,7 +42,7 @@ export function ContactSupport() {
       flex={1}
       textAlign={"left"}
       color={"white"}
-      p={8}
+      paddingX={3}
     >
       <HStack
         alignItems="flex-start"

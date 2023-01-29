@@ -1,9 +1,15 @@
-import { Center, Text } from "native-base";
+import { VStack, Text, Center } from "native-base";
+import { Header } from "../components/Header";
 
-export function Home() {
+import { DrawerScreenProps } from "@react-navigation/drawer";
+
+export function Home({ navigation }: DrawerScreenProps<any>) {
   return (
-    <Center flex={1} bgColor={"gray.900"}>
-      <Text color={"white"}>Home</Text>
-    </Center>
+    <VStack paddingX={3} paddingY={6} flex={1} bgColor="gray.900">
+      <Header onMenuButtonPress={() => navigation.toggleDrawer()} />
+      <Center flex={1}>
+        <Text color={"white"}>Home</Text>
+      </Center>
+    </VStack>
   );
 }

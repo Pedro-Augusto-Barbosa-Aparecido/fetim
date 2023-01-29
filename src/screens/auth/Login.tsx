@@ -5,13 +5,15 @@ import { Feather } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 
 import Toast from "react-native-toast-message";
-import { Button } from "../components/Button";
-import { Input } from "../components/Input";
+import { Button } from "../../components/Button";
+import { Input } from "../../components/Input";
 
 import * as zod from "zod";
 
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+
+import auth from "@react-native-firebase/auth";
 
 const loginSchema = zod.object({
   email: zod
@@ -45,18 +47,19 @@ export function Login() {
   });
 
   async function handleAuthenticateUser(data: LoginFormData) {
+    const { email, password } = data;
+
     try {
+      await auth().signInWithEmailAndPassword(email, password);
+
       Toast.show({
         text1: "Success",
         text2: "Login efetuado com sucesso",
       });
 
-      console.log(data);
-
-      navigate("home");
+      // navigate("home");
     } catch (err) {
       console.log(err);
-
       Toast.show({
         text1: "Failed",
         text2: "Não foi possível efetuar o login!",
@@ -115,6 +118,7 @@ export function Login() {
                 isInvalid={!!errors.email}
                 errorMessage={errors.email?.message}
                 keyboardType="email-address"
+                autoCapitalize="none"
               />
             )}
           />
@@ -175,6 +179,7 @@ export function Login() {
           onPress={handleSubmit(handleAuthenticateUser)}
         />
 
+        {/* <Text color="gray.400">Esqueci minha senha?</Text> */}
         <Text color={"gray.300"} mt={2} p={0}>
           Está com problemas para entrar?{" "}
           <Text
