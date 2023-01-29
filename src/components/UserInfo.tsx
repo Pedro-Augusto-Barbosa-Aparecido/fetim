@@ -1,11 +1,11 @@
 import { Box, HStack, Text, useTheme } from "native-base";
-import { FontAwesome, MaterialIcons } from "@expo/vector-icons";
+import { FontAwesome } from "@expo/vector-icons";
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 
 export function UserInfo() {
   const { colors } = useTheme();
-  const { user, handleSignOut } = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
 
   return (
     <Box p={3} flexDirection="column">
@@ -16,15 +16,6 @@ export function UserInfo() {
           color={colors.warmGray[900]}
           onPress={() => {}}
         />
-
-        <HStack alignItems="center" justifyContent="flex-start">
-          <MaterialIcons
-            name="logout"
-            size={24}
-            color={colors.black}
-            onPress={() => handleSignOut()}
-          />
-        </HStack>
       </HStack>
 
       <Text color={colors.gray[200]} marginY={4}>

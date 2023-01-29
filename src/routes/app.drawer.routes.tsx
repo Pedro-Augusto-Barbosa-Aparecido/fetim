@@ -4,6 +4,8 @@ import { DrawerContent } from "../components/drawer/DrawerContent";
 import { ContactSupport } from "../screens/ContactSupport";
 import { Home } from "../screens/Home";
 
+import { Ionicons, MaterialIcons } from "@expo/vector-icons";
+
 const { Navigator, Screen } = createDrawerNavigator();
 
 export function AppRoutes() {
@@ -14,23 +16,36 @@ export function AppRoutes() {
       initialRouteName="home"
       screenOptions={{
         headerShown: false,
-        drawerContentContainerStyle: {
-          flex: 1,
-          justifyContent: "space-between",
-        },
+        drawerActiveBackgroundColor: colors.gray[500],
+        drawerActiveTintColor: colors.blue[600],
+        drawerInactiveTintColor: colors.gray[200],
         drawerStyle: {
-          paddingBottom: 100,
           backgroundColor: colors.gray[600],
         },
         drawerLabelStyle: {
-          color: colors.gray[300],
+          marginLeft: -25,
         },
-        drawerActiveBackgroundColor: colors.gray[500],
       }}
       drawerContent={(props) => <DrawerContent {...props} />}
     >
-      <Screen name="Home" component={Home} />
-      <Screen name="Support" component={ContactSupport} />
+      <Screen
+        name="Home"
+        component={Home}
+        options={{
+          drawerIcon: ({ color }) => (
+            <Ionicons name="home" size={20} color={color} />
+          ),
+        }}
+      />
+      <Screen
+        name="Support"
+        component={ContactSupport}
+        options={{
+          drawerIcon: ({ color }) => (
+            <MaterialIcons name="contact-support" size={20} color={color} />
+          ),
+        }}
+      />
     </Navigator>
   );
 }
